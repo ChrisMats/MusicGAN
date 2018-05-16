@@ -17,10 +17,11 @@ from util import *
 
 
 
-__author__ = "Matthaios Stylianidis"
+__author__ = "MattSt"
 
 
 # Default values for CLI arguments
+DEFAULT_TFRECORD_NAME = 'train.tfrecords'
 DEFAULT_DATASET_PATH = '../../SpeechCommands/' # Default Speech Commands dataset path 
 DEFAULT_PREPROCESSED_DATASET_PATH = '../../SC09_Preprocessed/' # Default path to save preprocessed data
 DEFAULT_FIXED_SIGNAL_SIZE = 16384 # Default size to pad/crop signals to
@@ -29,6 +30,7 @@ DEFAULT_RANDOM_PADDING = False # True if random padding should be applied
 
 def _bytes_feature(value):
   return tf.train.Feature(bytes_list=tf.train.BytesList(value=[value]))
+
 
 
 def get_arguments():
@@ -46,6 +48,8 @@ def get_arguments():
                         help="Signals should be cropped/padded to have this fixed length.")
     parser.add_argument("--random-padding", type=str, default = DEFAULT_RANDOM_PADDING,
                         help="Set to true if you want to apply random padding.")
+    parser.add_argument("--dataset-fname", type=str, default = DEFAULT_TFRECORD_NAME,
+                        help="Desired file name for the TFRecord dataset.")
     return parser.parse_args()
 
 
@@ -88,22 +92,16 @@ else:
 
 #################### Create tf session, preprocess and save data as TFRecords ####################
 sess = tf.Session()
+
+# Create TFRecord writer
+writer = tf.python_io.TFRecordWriter(args.SC09_path + args.dataset_fname)
+
 # For each folder in the dataset folder
 sample_count = 0
 for folder_name in os.listdir(args.SC_path):
     # Ommit the folder if its name does not correspond to 0-9 digits.
     if folder_name not in class_folders:
         continue
-    
-    
-    new_folder_path = args.SC09_path + folder_name + '/'
-    # Create folder with the same name in saving directory
-    if not os.path.exists(new_folder_path):
-        os.makedirs(new_folder_path)
-        print("Created " + new_folder_path + " directory.")
-    
-    # Create TFRecord writer
-    writer = tf.python_io.TFRecordWriter(new_folder_path + 'train.tfrecords')
     
     folder_path = args.SC_path + folder_name + "/"
     print("Preprocessing samples from folder " + folder_path + ".")
@@ -115,7 +113,8 @@ for folder_name in os.listdir(args.SC_path):
         preprocessed_data = sess.run(preprocessed_samples, feed_dict = {audio_file_path: load_file_path})
         
         # Create a feature 
-        feature = {'train/signal': _bytes_feature(tf.compat.as_bytes(preprocessed_data.tostring()))}
+        feature = {'signal': _bytes_feature(tf.compat.as_bytes(preprocessed_data.tostring()))}
+        #'label': _bytes_feature(tf.compat.as_bytes(folder_name))
         # Create example protocol buffer
         exmple_protocol_buff = tf.train.Example(features=tf.train.Features(feature = feature))
         # Serialize to string and write to file
@@ -123,14 +122,14 @@ for folder_name in os.listdir(args.SC_path):
         # Increase count of current class files by 1
         folder_file_count += 1
     
-    # Close TFRecord writer
-    writer.close()
-    sys.stdout.flush()
-    
     # Increase count of samples processed
     sample_count += folder_file_count
     
-    print(str(folder_file_count) + " samples from folder " + folder_path +           " have been preprocessed and saved in " +           args.SC09_path + folder_name + ".\n")
+    print(str(folder_file_count) + " samples from folder " + folder_path + \
+          " have been preprocessed and saved in " + args.SC09_path + args.dataset_fname + ".\n")
     
+# Close TFRecord writer
+writer.close()
+sys.stdout.flush()
 print("Loaded, preprocessed and saved " + str(sample_count) + " wav files as TF records.")
 
