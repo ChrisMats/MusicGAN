@@ -17,7 +17,7 @@ from util import *
 
 
 
-__author__ = "Matthaios Stylianidis"
+__author__ = "MattSt"
 
 
 # Default values for CLI arguments
