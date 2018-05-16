@@ -86,8 +86,6 @@ else:
     reshaped_samples = tf.reshape(audio_samples, [1, tf.size(audio_samples), -1])
     preprocessed_samples = tf.image.resize_image_with_crop_or_pad(reshaped_samples, tensor_height, fixed_signal_size)
     preprocessed_samples = tf.reshape(preprocessed_samples, [1, fixed_signal_size])
-    pass
-
 
 
 #################### Create tf session, preprocess and save data as TFRecords ####################
@@ -113,8 +111,8 @@ for folder_name in os.listdir(args.SC_path):
         preprocessed_data = sess.run(preprocessed_samples, feed_dict = {audio_file_path: load_file_path})
         
         # Create a feature 
-        feature = {'signal': _bytes_feature(tf.compat.as_bytes(preprocessed_data.tostring()))}
-        #'label': _bytes_feature(tf.compat.as_bytes(folder_name))
+        feature = {'signal': _bytes_feature(tf.compat.as_bytes(preprocessed_data.tostring())),
+                    'label': _bytes_feature(tf.compat.as_bytes(folder_name))}
         # Create example protocol buffer
         exmple_protocol_buff = tf.train.Example(features=tf.train.Features(feature = feature))
         # Serialize to string and write to file
