@@ -11,7 +11,7 @@ from pysndfile import sndio
 
 
 
-__author__ = "Matthaios Stylianidis"
+__author__ = "MattSt"
 
 
 def load_audio(file_path):
