@@ -11,8 +11,14 @@ from pysndfile import sndio
 
 
 
-__author__ = "MattSt"
+__author__ = "MattSt, matsou"
 
+CHECKPOINT_DIR = os.path.join(os.getcwd(), "checkpoints/")
+
+def get_checkpoint_path(network_name):
+    if not os.path.exists(CHECKPOINT_DIR):
+        os.makedirs(CHECKPOINT_DIR)
+    return os.path.join(CHECKPOINT_DIR, network_name)
 
 def load_audio(file_path):
     """Loads audio data from wav file using pysndfile.
