@@ -15,11 +15,23 @@ from pysndfile import sndio
 __author__ = "MattSt, matsou"
 
 CHECKPOINT_DIR = os.path.join(os.getcwd(), "checkpoints/")
+RESULTS_DIR = os.path.join(os.getcwd(), "results/")
+PARTIAL_RESULTS_DIR = os.path.join(os.getcwd(), "results/training_step_res/")
 
 def get_checkpoint_path(network_name):
     if not os.path.exists(CHECKPOINT_DIR):
         os.makedirs(CHECKPOINT_DIR)
     return os.path.join(CHECKPOINT_DIR, network_name)
+
+def get_results_path(name):
+    if not os.path.exists(RESULTS_DIR):
+        os.makedirs(RESULTS_DIR)
+    return os.path.join(RESULTS_DIR, name)
+
+def get_par_results_path(name):
+    if not os.path.exists(PARTIAL_RESULTS_DIR):
+        os.makedirs(PARTIAL_RESULTS_DIR)
+    return os.path.join(PARTIAL_RESULTS_DIR, name)
 
 def load_audio(file_path):
     """Loads audio data from wav file using pysndfile.
