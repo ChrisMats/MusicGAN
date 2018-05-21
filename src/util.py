@@ -9,7 +9,7 @@ import numpy as np
 import tensorflow as tf
 import os
 from pysndfile import sndio
-
+import pickle
 
 
 __author__ = "MattSt, matsou"
@@ -32,6 +32,15 @@ def get_par_results_path(name):
     if not os.path.exists(PARTIAL_RESULTS_DIR):
         os.makedirs(PARTIAL_RESULTS_DIR)
     return os.path.join(PARTIAL_RESULTS_DIR, name)
+
+def save_pickle_file(filename, data):
+    with open(filename, 'wb') as f:
+        pickle.dump(data, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+def load_pickle_file(filename):
+    with open(filename, 'rb') as f:
+        return pickle.load(f)
+
 
 def load_audio(file_path):
     """Loads audio data from wav file using pysndfile.
