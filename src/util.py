@@ -61,17 +61,17 @@ def load_audio(file_path):
 # TODO: Implement function below
 def crop_or_random_pad(audio_samples, audio_desired_length):
     """ Preprocesses audio samples by cropping or random padding.
-    
+
     Given a fixed signal length, if the given signal is longer than the designated
-    length then this function crops the sides of the signal and if the signal is 
+    length then this function crops the sides of the signal and if the signal is
     smaller than that length it adds random padding until it meets the desired
     length.
-    
+
     Args:
         audio_samples: A tensor which includes the samples of the signal.
         audio_desired_length: A tensor with the desired fixed size of the
             signal, given in that order.
-            
+
     Returns:
         A tf.float32 with the signal after preprocessed so that it has the desired
         length.
@@ -82,7 +82,7 @@ def crop_or_random_pad(audio_samples, audio_desired_length):
     # Get difference of samples with maximum length
     #diff = tf.subtract(sample_no, audio_desired_length)
     #abs_diff = tf.abs(diff)
-    # Pad the sides symmetrically 
+    # Pad the sides symmetrically
     #padded_samples = tf.pad(sample_info, [[0, 0], [0, 0]], mode = 'CONSTANT')
 
 def vizualise_samples(fake, true, itr=None,fs = 16384):
@@ -98,8 +98,8 @@ def vizualise_samples(fake, true, itr=None,fs = 16384):
     ax.set_title("Fake")
     save_plot('signal_it{}'.format(itr))
     plt.show()
-    
-    fig = plt.figure()    
+
+    fig = plt.figure()
 #     plt.title('The frames')
     plt.axis('off')
     plt.subplots_adjust(hspace = 0.4)
@@ -114,7 +114,7 @@ def vizualise_samples(fake, true, itr=None,fs = 16384):
     save_plot('frames_it{}'.format(itr))
     plt.show()
     # 4.2 - Apply pre-emphasis filter to frames
-    fig = plt.figure() 
+    fig = plt.figure()
     plt.axis('off')
 #     plt.title('The pre-emphasis frames')
     plt.subplots_adjust(hspace = 0.4)
@@ -127,7 +127,7 @@ def vizualise_samples(fake, true, itr=None,fs = 16384):
     save_plot('pre-emph_it{}'.format(itr))
     plt.show()
     # 4.3 - Apply hamming window to the pre-emphasized frames
-    fig = plt.figure() 
+    fig = plt.figure()
     plt.axis('off')
 #     plt.title('The windowed frames')
     plt.subplots_adjust(hspace = 0.4)
@@ -140,7 +140,7 @@ def vizualise_samples(fake, true, itr=None,fs = 16384):
     save_plot('window_it{}'.format(itr))
     plt.show()
     # 4.4 - Compute the power spectrum of the windowed frames
-    fig = plt.figure()  
+    fig = plt.figure()
     plt.axis('off')
 #     plt.title('The power spectrogram of the windowed frames')
     plt.subplots_adjust(hspace = 0.4)
@@ -163,4 +163,3 @@ def save_plot(savename):
             os.makedirs(savepath)
         plt.savefig(os.path.join(savepath, savename), bbox_inches='tight')
         print(savename + " successfully saved to " + filepath)
-

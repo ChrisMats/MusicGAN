@@ -63,6 +63,23 @@ def enframe(samples, winlen=20, winshift=10, samplingrate=20000):
 
     return np.asarray(frames)
 
+# Alternative enframe implementation
+def enframe2(samples, winlen, winshift):
+    """
+    Slices the input samples into overlapping windows.
+    Args:
+        winlen: window length in samples.
+        winshift: shift of consecutive windows in samples
+    Returns:
+        numpy array [N x winlen], where N is the number of windows that fit
+        in the input signal
+    """
+    A = np.array(samples[0:winlen].reshape((1, winlen)))
+    stepsize = winlen - winshift
+    for i in range(stepsize, len(samples) - winlen, stepsize):
+        A = np.vstack((A, samples[i:i+winlen].reshape((1, winlen))))
+    return A
+
 
 def preemp(input, p=0.97):
     """
