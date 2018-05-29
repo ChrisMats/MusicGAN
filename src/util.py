@@ -42,6 +42,23 @@ def load_pickle_file(filename):
         return pickle.load(f)
 
 
+def get_names(file_name):
+    """
+    Given a txt file with a list of names, it returns this list.
+
+    Args:
+        file_name: Name of file including the list of names.
+
+    Returns:
+        A list with the file names in the form of strings.
+    """
+    file_name_list = []
+    with open(file_name, 'r') as fp:
+        for line in fp:
+            line = line[:-1] # Remove newline
+            file_name_list.append(line)
+    return file_name_list
+
 def load_audio(file_path):
     """Loads audio data from wav file using pysndfile.
 
