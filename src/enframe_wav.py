@@ -59,7 +59,7 @@ if not os.path.exists(args.frames_path):
     print("Created " + args.frames_path + " directory.")
 
 
-# TODO: do sth so that samples with lower and high sampl. freq. don't have the same size
+
 for filename in tqdm(os.listdir(args.WAV_path)):
     samples, sample_freq = load_audio(args.WAV_path + filename)
     resample_freq = sample_freq
